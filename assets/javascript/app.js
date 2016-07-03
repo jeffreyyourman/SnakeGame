@@ -1,12 +1,18 @@
+//constants
 var COLS = 26, ROWS = 26;
 
+//IDs
 var EMPTY = 0, SNAKE = 1, FRUIT =2;
+
+//directions
+var LEFT=0, UP=1, RIGHT=2, DOWN=3;
 
 var grid = {
     width: null,
     height: null,
     _grid: null,
 
+    //decateration columns and rows
     init: function(d, c, r) {
       this.width = c;
       this.height = r;
@@ -54,29 +60,29 @@ var grid = {
 function setFood() {
   var empty = [];
     for (var x = 0; x < grid.width; x++) {
-      for (var y = 0; y < array.length; y++) {
+      for (var y = 0; y < grid.height; y++) {
         if (grid.get(x,y) === EMPTY) {
           empty.push({x:x, y:y});
         }
       }
     }
     var randpos = empty[Math.floor(Math.random()* empty.length)];
-    grid.set(FRUIT, randompos.y);
+    grid.set(FRUIT, randpos.x, randpos.y);
 }
 
 
 //Game objects
 //ctx is context
-var convas, ctx, keystate, frames;
+var canvas, ctx, keystate, frames;
 function main(){
-  convas = document.createElement('canvas');
-  convas.width = COLS*20;
-  convas.height = ROWS*20;
-  ctx = convas.getCOntext('2d');
+  canvas = document.createElement('canvas');
+  canvas.width = COLS*20;
+  canvas.height = ROWS*20;
+  ctx = canvas.getContext('2d');
   document.body.appendChild(canvas);
 
   frames = 0;
-  ketstate = {};
+  keystate = {};
 
   init();
   loop();
@@ -84,10 +90,48 @@ function main(){
 
 function init(){
   grid.init(EMPTY, COLS, ROWS);
+
+  //sp is set stop position
+  var sp = {x:Math.floor(COLS/2), y:ROWS-1};
+  snake.init(UP, sp.x, sp.y);
+  grid.set(SNAKE, sp.x, sp.y);
+
+  setFood();
 }
 
-function update (){}
+function loop(){
+  update();
+  draw();
 
-function draw (){}
+  window.requestAnimationFrame(loop, canvas);
+}
+
+function update (){
+  frames++;
+}
+
+function draw (){
+  //snake tailwidth = tw
+  var tw= canvas.width/grid.width;
+  //snake tailheight = th
+  var th= canvas.height/grid.height;
+
+  for (var x = 0; x < grid.width; x++) {
+    for (var y = 0; y < grid.height; y++) {
+      switch (grid.get(x,y)) {
+        case EMPTY:
+        ctx.fillStyle = '#fff';
+        break;
+        case SNAKE:
+        ctx.fillStyle = '#0ff';
+        break;
+        case FRUIT:
+        ctx.fillStyle = '#f00';
+        break;
+      }
+      ctx.fillRect(x*tw, y*th, tw, th);
+    }
+  }
+}
 
 main();
