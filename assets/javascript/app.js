@@ -185,19 +185,19 @@ function draw (){
     for (var y = 0; y < grid.height; y++) {
       switch (grid.get(x,y)) {
         case EMPTY:
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = 'black';
         break;
         case SNAKE:
-        ctx.fillStyle = '#0ff';
+        ctx.fillStyle = 'purple';
         break;
         case FRUIT:
-        ctx.fillStyle = '#f00';
+        ctx.fillStyle = 'gold';
         break;
       }
       ctx.fillRect(x*tw, y*th, tw, th);
     }
   }
-  ctx.fillStyle = '#000';
+  ctx.fillStyle = 'white';
   ctx.fillText('SCORE: ' + score, 10, canvas.height-10);
 }
 
